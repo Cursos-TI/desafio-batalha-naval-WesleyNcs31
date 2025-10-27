@@ -4,37 +4,89 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
+
+// Tamanho do tabuleiro e dos navios
+#define TAM_TABULEIRO 10  // tabuleiro 10x10
+#define TAM_NAVIO 3       // navios com 3 partes
+
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
+    // Fazendo o tabuleiro, que é uma matriz 10x10
+    int tabuleiro[TAM_TABULEIRO][TAM_TABULEIRO];
     
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
-
+    // Colocando 0 em tudo, que é agua
+    for (int i = 0; i < TAM_TABULEIRO; i++) {
+        for (int j = 0; j < TAM_TABULEIRO; j++) {
+            tabuleiro[i][j] = 0;  // agua
+        }
+    }
+    
+    // Coordenadas dos navios, eu escolhi assim
+    // Navio horizontal: linha 2, coluna 3
+    int linha_navio_horizontal = 2;
+    int coluna_navio_horizontal = 3;
+    
+    // Navio vertical: linha 1, coluna 7
+    int linha_navio_vertical = 1;
+    int coluna_navio_vertical = 7;
+    
+    // Ver se o navio horizontal cabe no tabuleiro
+    if (coluna_navio_horizontal + (TAM_NAVIO - 1) >= TAM_TABULEIRO) {
+        printf("Erro: Navio horizontal nao cabe.\n");
+        return 1;
+    }
+    
+    // Ver se o navio vertical cabe
+    if (linha_navio_vertical + (TAM_NAVIO - 1) >= TAM_TABULEIRO) {
+        printf("Erro: Navio vertical nao cabe.\n");
+        return 1;
+    }
+    
+    // Ver se os navios se batem
+    int sobreposicao = 0;
+    for (int k = 0; k < TAM_NAVIO; k++) {
+        int pos_h_linha = linha_navio_horizontal;
+        int pos_h_coluna = coluna_navio_horizontal + k;
+        
+        int pos_v_linha = linha_navio_vertical + k;
+        int pos_v_coluna = coluna_navio_vertical;
+        
+        if (pos_h_linha == pos_v_linha && pos_h_coluna == pos_v_coluna) {
+            sobreposicao = 1;
+            break;
+        }
+    }
+    
+    if (sobreposicao) {
+        printf("Erro: Navios se batem.\n");
+        return 1;
+    }
+    
+    // Colocando o navio horizontal no tabuleiro
+    for (int k = 0; k < TAM_NAVIO; k++) {
+        tabuleiro[linha_navio_horizontal][coluna_navio_horizontal + k] = 3;  // parte do navio
+    }
+    
+    // Colocando o navio vertical
+    for (int k = 0; k < TAM_NAVIO; k++) {
+        tabuleiro[linha_navio_vertical + k][coluna_navio_vertical] = 3;  // parte do navio
+    }
+    
+    // Mostrando o tabuleiro
+    printf("Tabuleiro do Batalha Naval:\n");
+    printf("  ");  // espaco
+    for (int j = 0; j < TAM_TABULEIRO; j++) {
+        printf("%d ", j + 1);  // colunas 1 a 10
+    }
+    printf("\n");
+    
+    for (int i = 0; i < TAM_TABULEIRO; i++) {
+        printf("%d ", i + 1);  // linha
+        for (int j = 0; j < TAM_TABULEIRO; j++) {
+            printf("%d ", tabuleiro[i][j]);  // mostra 0 ou 3
+        }
+        printf("\n");
+    }
+    
     return 0;
 }
+
